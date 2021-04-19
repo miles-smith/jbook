@@ -1,12 +1,6 @@
 import * as esbuild from 'esbuild-wasm';
-import axios from 'axios';
-import localForage from 'localforage';
 
-const fileCache = localForage.createInstance({
-  name: 'filecache',
-});
-
-export const unpkgPathPlugin = (userCode: string) => {
+export const unpkgPathPlugin = () => {
   const rootUrl = 'https://unpkg.com';
 
   return {
@@ -32,36 +26,6 @@ export const unpkgPathPlugin = (userCode: string) => {
           namespace: 'a',
           path: `https://unpkg.com/${args.path}`
         };
-      });
-
-      build.onLoad({ filter: /.*/ }, async (args: any) => {
-        // FIXME: Remove unnecessary logging
-        console.log('onLoad', args);
-
-        // FIXME: For testing only!
-        if (args.path === 'index.js') {
-          return {
-            loader: 'jsx',
-            contents: userCode,
-          };
-        }
-
-        const cacheResult = await fileCache.getItem<esbuild.OnLoadResult>(args.path);
-
-        if (cacheResult) {
-          return cacheResult;
-        }
-
-        const { data, request } = await axios.get(args.path);
-        const result: esbuild.OnLoadResult = {
-          loader: 'jsx',
-          contents: data,
-          resolveDir: new URL('./', request.responseURL).pathname,
-        };
-
-        await fileCache.setItem(args.path, result);
-
-        return result;
       });
     },
   };
