@@ -12,23 +12,21 @@ export const unpkgPathPlugin = (userCode: string) => {
   return {
     name: 'unpkg-path-plugin',
     setup(build: esbuild.PluginBuild) {
-      build.onResolve({ filter: /.*/ }, async (args: any) => {
-        // FIXME: Remove unnecessary logging
-        console.log('onResolve', args);
-
-        // FIXME: For testing only!
-        if(args.path === 'index.js') {
-          return { path: args.path, namespace: 'a' };
-        };
-
-        // FIXME: namespace!
-        if(args.path.includes('./') || args.path.includes('../')) {
-          return {
-            namespace: 'a',
-            path: new URL(args.path, `${rootUrl}${args.resolveDir}/`).href,
-          };
+      build.onResolve({ filter: /(^index\.js$)/ }, () => {
+        return {
+          namespace: 'a',
+          path: 'index.js',
         }
+      });
 
+      build.onResolve({ filter: /^\.+\// }, (args: any) => {
+        return {
+          namespace: 'a',
+          path: new URL(args.path, `${rootUrl}${args.resolveDir}/`).href,
+        };
+      });
+
+      build.onResolve({ filter: /.*/ }, async (args: any) => {
         // FIXME: namespace!
         return {
           namespace: 'a',
