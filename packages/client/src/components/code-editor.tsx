@@ -35,7 +35,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
         useTabs: false,
         semi: true,
         singleQuote: true,
-      })
+      }).replace(/\n$/, '')
     );
   };
 
