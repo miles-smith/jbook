@@ -1,8 +1,12 @@
 import './code-editor.css';
+import './syntax.css';
+
 import { useRef } from 'react';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
+import codeShift from 'jscodeshift';
+import Highlighter from 'monaco-jsx-highlighter';
 
 interface CodeEditorProps {
   initialValue: string,
@@ -20,6 +24,17 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
     });
 
     monacoEditor.getModel()?.updateOptions({ tabSize: 2 });
+
+    const highlighter = new Highlighter(
+      // @ts-ignore
+      window.monaco,
+      codeShift,
+      monacoEditor
+    );
+
+    // Jankily suppress the noisy output from Highlighter as it's parsing incomplete markup...
+    const noOp = () => {};
+    highlighter.highLightOnDidChangeModelContent(noOp, noOp, undefined, noOp);
   };
 
   const onFormatClick = () => {
