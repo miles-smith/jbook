@@ -20,6 +20,8 @@ const App = () => {
     if(!service.current)
       return;
 
+    iframe.current.srcdoc = srcHtml;
+
     const result = await service.current.build({
       entryPoints: ['index.js'],
       bundle: true,
