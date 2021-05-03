@@ -41,6 +41,20 @@ const App = () => {
     startService();
   }, []);
 
+  const srcHtml = `
+    <!DOCTYPE html>
+    <html lang="en" dir="ltr">
+      <head>
+        <meta charset="utf-8">
+        <title></title>
+        <script>${code}</script>
+      </head>
+      <body>
+        <h1>Hello IFrame</h1>
+      </body>
+    </html>
+  `;
+
   return(
     <div>
       <textarea value={input} onChange={e => setInput(e.target.value)}></textarea>
@@ -48,6 +62,7 @@ const App = () => {
         <button onClick={onClick}>Submit</button>
       </div>
       <pre>{code}</pre>
+      <iframe srcDoc={srcHtml} sandbox="allow-scripts"></iframe>
     </div>
   );
 }
