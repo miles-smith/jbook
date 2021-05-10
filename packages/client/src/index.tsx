@@ -5,11 +5,12 @@ import ReactDOM from 'react-dom';
 import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 import { fetchPlugin } from './plugins/fetch-plugin';
 import CodeEditor from './components/code-editor';
+import CodePreview from './components/code-preview';
 
 const App = () => {
   const [input, setInput] = useState('');
+  const [code, setCode]   = useState('');
   const service = useRef<any>();
-  const iframe  = useRef<any>();
 
   const startService = async () => {
     service.current = await esbuild.startService({
@@ -21,8 +22,6 @@ const App = () => {
   const onClick = async () => {
     if(!service.current)
       return;
-
-    iframe.current.srcdoc = srcHtml;
 
     const result = await service.current.build({
       entryPoints: ['index.js'],
@@ -38,37 +37,12 @@ const App = () => {
       },
     });
 
-    iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
+    setCode(result.outputFiles[0].text);
   }
 
   useEffect(() => {
     startService();
   }, []);
-
-  const srcHtml = `
-    <!DOCTYPE html>
-    <html lang="en" dir="ltr">
-      <head>
-        <meta charset="utf-8">
-        <title></title>
-        <script>
-          window.addEventListener('message', (event) => {
-            try {
-              eval(event.data);
-            } catch (err) {
-              const root = document.getElementById('root');
-              root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
-
-              console.error(err);
-            }
-          }, false);
-        </script>
-      </head>
-      <body>
-        <div id="root"></div>
-      </body>
-    </html>
-  `;
 
   return(
     <div>
@@ -77,7 +51,7 @@ const App = () => {
       <div>
         <button onClick={onClick}>Submit</button>
       </div>
-      <iframe title="preview" ref={iframe} srcDoc={srcHtml} sandbox="allow-scripts"></iframe>
+      <CodePreview code={code} />
     </div>
   );
 }
