@@ -7,8 +7,9 @@ interface ResizableProps {
 }
 
 const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
-  const [innerHeight, setInnerHeight] = useState(window.innerHeight);
-  const [innerWidth, setInnerWidth]   = useState(window.innerWidth);
+  const [innerHeight, setInnerHeight]   = useState(window.innerHeight);
+  const [innerWidth, setInnerWidth]     = useState(window.innerWidth);
+  const [currentWidth, setCurrentWidth] = useState(window.innerWidth * 0.75);
   let resizableProps: ResizableBoxProps;
 
   useEffect(() => {
@@ -43,11 +44,12 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
   } else {
     resizableProps = {
       height: Infinity,
-      width: innerWidth * 0.75,
+      width: currentWidth,
       resizeHandles: ['e'],
       minConstraints: [innerWidth * 0.2, Infinity],
       maxConstraints: [innerWidth * 0.75, Infinity],
       className: 'resize-horizontal',
+      onResizeStop: (_event, data) => { setCurrentWidth(data.size.width) }
     }
   }
 
