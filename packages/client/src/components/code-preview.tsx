@@ -36,7 +36,10 @@ const CodePreview: React.FC<CodePreviewProps> = ({ code }) => {
 
   useEffect(() => {
     iframe.current.srcdoc = srcHtml;
-    iframe.current.contentWindow.postMessage(code, '*');
+
+    setTimeout(() => {
+      iframe.current.contentWindow.postMessage(code, '*');
+    }, 100);
   }, [code]);
 
   return(
