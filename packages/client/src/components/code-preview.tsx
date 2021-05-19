@@ -11,6 +11,7 @@ const srcHtml = `
     <head>
       <meta charset="utf-8">
       <title></title>
+      <style>html { background-color: white; }</style>
       <script>
         window.addEventListener('message', (event) => {
           try {
