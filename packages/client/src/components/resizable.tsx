@@ -6,6 +6,8 @@ interface ResizableProps {
   direction: 'horizontal' | 'vertical';
 }
 
+const widthScaling = 0.75;
+
 const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
   const [innerHeight, setInnerHeight]   = useState(window.innerHeight);
   const [innerWidth, setInnerWidth]     = useState(window.innerWidth);
@@ -23,8 +25,8 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
         setInnerHeight(window.innerHeight);
         setInnerWidth(window.innerWidth);
 
-        if(window.innerWidth * 0.75 < currentWidth) {
-          setCurrentWidth(window.innerWidth * 0.75)
+        if(window.innerWidth * widthScaling < currentWidth) {
+          setCurrentWidth(window.innerWidth * widthScaling)
         }
       }, 100)
     }
@@ -51,7 +53,7 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
       width: currentWidth,
       resizeHandles: ['e'],
       minConstraints: [innerWidth * 0.2, Infinity],
-      maxConstraints: [innerWidth * 0.75, Infinity],
+      maxConstraints: [innerWidth * widthScaling, Infinity],
       className: 'resize-horizontal',
       onResizeStop: (_event, data) => { setCurrentWidth(data.size.width) }
     }
