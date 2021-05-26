@@ -6,12 +6,14 @@ import bundle from '../bundler';
 
 const CodeCell = () => {
   const [input, setInput] = useState('');
+  const [error, setError] = useState('');
   const [code, setCode]   = useState('');
 
   useEffect(() => {
     const timer = setTimeout(async () => {
       const output = await bundle(input);
-      setCode(output);
+      setCode(output.code);
+      setError(output.error);
     }, 1000);
 
     return () => { clearTimeout(timer); }
@@ -23,7 +25,7 @@ const CodeCell = () => {
         <Resizable direction='horizontal'>
           <CodeEditor initialValue="" onChange={value => setInput(value)} />
         </Resizable>
-        <CodePreview code={code} />
+        <CodePreview code={code} error={error} />
       </div>
     </Resizable>
   );

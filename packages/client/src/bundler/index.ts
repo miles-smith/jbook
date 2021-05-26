@@ -12,21 +12,31 @@ const bundle = async (userCode: string) => {
     });
   }
 
-  const bundledCode = await service.build({
-    entryPoints: ['index.js'],
-    bundle: true,
-    write: false,
-    plugins: [
-      unpkgPathPlugin(),
-      fetchPlugin(userCode)
-    ],
-    define: {
-      global: 'window',
-      'process.env.NODE_ENV': '"production"',
-    },
-  });
+  try {
+    const bundledCode = await service.build({
+      entryPoints: ['index.js'],
+      bundle: true,
+      write: false,
+      plugins: [
+        unpkgPathPlugin(),
+        fetchPlugin(userCode)
+      ],
+      define: {
+        global: 'window',
+        'process.env.NODE_ENV': '"production"',
+      },
+    });
 
-  return bundledCode.outputFiles[0].text;
+    return {
+      code: bundledCode.outputFiles[0].text,
+      error: '',
+    }
+  } catch(err) {
+    return {
+      code: '',
+      error: err.message,
+    }
+  }
 };
 
 export default bundle;
