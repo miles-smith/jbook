@@ -21,7 +21,17 @@ const initialState: CellGroupState = {
 const reducer = (state: CellGroupState = initialState, action: Action): CellGroupState => {
   switch(action.type) {
     case ActionType.INSERT_CELL:
+    return state;
     case ActionType.UPDATE_CELL:
+      const { id, data } = action.payload;
+
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [id]: { ...state.data[id], data }
+        }
+      };
     case ActionType.DELETE_CELL:
     case ActionType.MOVE_CELL:
     default:
