@@ -14,7 +14,7 @@ export type Direction =
 export interface InsertCellAction {
   type: ActionType.INSERT_CELL;
   payload: {
-    id: string;
+    id: string | null;
     type: CellType;
   };
 }
