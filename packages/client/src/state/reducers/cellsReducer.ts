@@ -33,9 +33,9 @@ const reducer = produce((state: CellGroupState = initialState, action: Action) =
       const insertIndex = state.order.findIndex(id => id === action.payload.id);
 
       if(insertIndex < 0) {
-        state.order.push(cell.id);
+        state.order.unshift(cell.id);
       } else {
-        state.order.splice(insertIndex, 0, cell.id);
+        state.order.splice(insertIndex + 1, 0, cell.id);
       }
 
       return state;
