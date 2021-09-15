@@ -9,7 +9,7 @@ import {
 } from '../actions';
 import { CellType } from '../cell';
 
-export const insertCell = (id: string, type: CellType): InsertCellAction => {
+export const insertCell = (id: string | null, type: CellType): InsertCellAction => {
   return {
     type: ActionType.INSERT_CELL,
     payload: { id, type }
