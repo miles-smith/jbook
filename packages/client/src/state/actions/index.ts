@@ -5,7 +5,9 @@ export type Action =
   | InsertCellAction
   | MoveCellAction
   | UpdateCellAction
-  | DeleteCellAction;
+  | DeleteCellAction
+  | BundleStartAction
+  | BundleCompleteAction;
 
 export type Direction =
   | 'up'
@@ -38,4 +40,22 @@ export interface UpdateCellAction {
 export interface DeleteCellAction {
   type: ActionType.DELETE_CELL;
   payload: string;
+}
+
+export interface BundleStartAction {
+  type: ActionType.BUNDLE_START,
+  payload: {
+    id: string;
+  }
+}
+
+export interface BundleCompleteAction {
+  type: ActionType.BUNDLE_COMPLETE,
+  payload: {
+    id: string,
+    bundle: {
+      code:  string;
+      error: string;
+    }
+  }
 }
