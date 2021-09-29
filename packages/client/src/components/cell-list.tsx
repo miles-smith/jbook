@@ -1,3 +1,5 @@
+import './cell-list.css';
+
 import { useSelector } from '../hooks/use-typed-selector';
 
 import { Fragment } from 'react';
@@ -10,7 +12,7 @@ const CellList: React.FC = () => {
   });
 
   return(
-    <div>
+    <div className="cell-list">
       <AddCell cellId={null} forceVisible={cells.length === 0} />
       {
         cells.map((cell) => {
