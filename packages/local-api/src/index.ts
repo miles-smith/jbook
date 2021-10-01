@@ -2,6 +2,8 @@ import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import path from 'path';
 
+import { createCellsRouter } from './routes/cells';
+
 export const serve = (port: number, file: string, useProxy: boolean) => {
   const app = express();
 
@@ -17,6 +19,8 @@ export const serve = (port: number, file: string, useProxy: boolean) => {
     const packagePath = require.resolve('client/build/index.html');
     app.use(express.static(path.dirname(packagePath)));
   }
+
+  app.use(createCellsRouter(file));
 
   return new Promise<void>((resolve, reject) => {
     app.listen(port, resolve)
