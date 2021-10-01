@@ -7,9 +7,23 @@ export const serveCommand =
     .command('serve [filename]')
     .description('Open a file for editing')
     .option('-p, --port <number>', 'Port to run server on', '4005')
-    .action((filename = 'notebook.js', options: { port: string }) => {
-      const filePath = path.parse(filename);
-      const file     = path.resolve(filePath.root, filePath.dir, filePath.base);
+    .action(async (filename = 'notebook.js', options: { port: string }) => {
+      try {
+        const filePath = path.parse(filename);
+        const file     = path.resolve(filePath.root, filePath.dir, filePath.base);
 
-      serve(+options.port, file);
+        await serve(+options.port, file);
+
+        console.log(`Opened ${file}. Navigate to http://localhost:${options.port} to edit the file.`);
+      } catch (e) {
+        // @ts-ignore
+        if (e.code === 'EADDRINUSE') {
+          console.error('Port is in use. Try running on another port.');
+        } else {
+          // @ts-ignore
+          console.error('Error:', e.message);
+        }
+
+        process.exit(1);
+      }
     });
