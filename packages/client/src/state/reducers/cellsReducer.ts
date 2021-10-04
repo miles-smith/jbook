@@ -21,6 +21,29 @@ const initialState: CellGroupState = {
 
 const reducer = produce((state: CellGroupState = initialState, action: Action) => {
   switch(action.type) {
+    case ActionType.FETCH_CELLS:
+      state.loading = true;
+      state.error   = null;
+
+      return state;
+    case ActionType.FETCH_CELLS_COMPLETE:
+      state.loading = false;
+      state.order   = action.payload.map((cell) => cell.id);
+      state.data    = action.payload.reduce((accumulator, cell) => {
+        accumulator[cell.id] = cell;
+        return accumulator;
+      }, {} as CellGroupState['data']);
+
+      return state;
+    case ActionType.FETCH_CELLS_ERROR:
+      state.loading = false;
+      state.error   = action.payload;
+
+      return state;
+    case ActionType.SAVE_CELLS_ERROR:
+      state.error = action.payload;
+      
+      return state;
     case ActionType.INSERT_CELL:
       const cell: Cell = {
         id: randomId(),

@@ -1,7 +1,11 @@
 import { ActionType } from '../action-types';
-import { CellType } from '../cell';
+import { Cell, CellType } from '../cell';
 
 export type Action =
+  | fetchCellsAction
+  | fetchCellsCompleteAction
+  | fetchCellsErrorAction
+  | saveCellsErrorAction
   | InsertCellAction
   | MoveCellAction
   | UpdateCellAction
@@ -12,6 +16,25 @@ export type Action =
 export type Direction =
   | 'up'
   | 'down';
+
+export interface fetchCellsAction {
+  type: ActionType.FETCH_CELLS;
+}
+
+export interface fetchCellsCompleteAction {
+  type: ActionType.FETCH_CELLS_COMPLETE;
+  payload: Cell[];
+}
+
+export interface fetchCellsErrorAction {
+  type: ActionType.FETCH_CELLS_ERROR;
+  payload: string;
+}
+
+export interface saveCellsErrorAction {
+  type: ActionType.SAVE_CELLS_ERROR;
+  payload: string;
+}
 
 export interface InsertCellAction {
   type: ActionType.INSERT_CELL;
